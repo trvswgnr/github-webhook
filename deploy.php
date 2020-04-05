@@ -6,7 +6,7 @@ define( 'LOGFILE', '/tmp/github-webhook.log' );
 $cmd = 'update-jekyll.sh 2>&1';
 
 // the shared secret, used to sign the POST data (using HMAC with SHA1)
-$secret = '00000000000000000000000000000000';
+$secret = 'notverysecret';
 
 // receive POST data for signature calculation, don't change!
 $post_data = file_get_contents( 'php://input' );
