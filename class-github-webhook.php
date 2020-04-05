@@ -1,9 +1,9 @@
 <?php
-class Webhook {
+class GitHub_WebHook {
 
-	private $EventType;
-	private $RawPayload;
-	private $Payload;
+	private string $EventType;
+	private string $RawPayload;
+	private object $Payload;
 
 	/**
 	 * Validates and processes current request

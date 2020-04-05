@@ -1,6 +1,6 @@
 <?php
-require_once 'class-webhook.php';
-$webhook = new Webhook();
+require_once 'class-github-webhook.php';
+$webhook = new GitHub_WebHook();
 
 if ( $webhook->ValidateHubSignature( 'notverysecret' ) ) {
 	echo 'validated';
