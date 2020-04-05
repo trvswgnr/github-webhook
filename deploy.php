@@ -1,11 +1,11 @@
 <?php
+use GitHubWebhook\Handler;
 try {
-	require_once 'class-github-webhook.php';
-	$webhook = new GitHub_WebHook();
-	if ( $webhook->ValidateHubSignature( 'notverysecret' ) ) {
-		echo 'validated';
+	$handler = new Handler( 'notverysecret', __DIR__ );
+	if ( $handler->handle() ) {
+		echo 'OK';
 	} else {
-		echo 'not validated';
+		echo 'Wrong secret';
 	}
 } catch ( Exception $e ) {
 	echo 'Caught exception: ',  $e->getMessage(), "\n";
