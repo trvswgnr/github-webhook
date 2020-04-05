@@ -1,12 +1,16 @@
 <?php
-require_once 'class-github-webhook.php';
-$webhook = new GitHub_WebHook();
-
-if ( $webhook->ValidateHubSignature( 'notverysecret' ) ) {
-	echo 'validated';
-} else {
-	echo 'not validated';
+try {
+	require_once 'class-github-webhook.php';
+	$webhook = new GitHub_WebHook();
+	if ( $webhook->ValidateHubSignature( 'notverysecret' ) ) {
+		echo 'validated';
+	} else {
+		echo 'not validated';
+	}
+} catch ( Exception $e ) {
+	echo 'Caught exception: ',  $e->getMessage(), "\n";
 }
+
 
 // $payload   = json_decode( $_POST['payload'] );
 // $on_master = 'master' === $payload->pull_request->base->ref ? true : false;
