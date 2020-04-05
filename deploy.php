@@ -1,6 +1,10 @@
 <?php
 var_dump( $_SERVER );
 
+$shared_secret = 'notverysecret';
+$secret        = hash_hmac( 'sha1', $_POST['payload'], $shared_secret, false );
+echo $secret;
+
 // try {
 // $handler = new Handler( 'notverysecret', __DIR__ );
 // if ( $handler->handle() ) {
