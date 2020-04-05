@@ -1,5 +1,8 @@
 <?php
 use GitHubWebhook\Handler;
+
+require_once 'class-handler.php';
+
 try {
 	$handler = new Handler( 'notverysecret', __DIR__ );
 	if ( $handler->handle() ) {
