@@ -75,6 +75,7 @@ class Webhook {
 			return false;
 		}
 		echo "Trigger event '$trigger' detected. On correct branch '$branch' & is merged = $merged. Deploying...";
+		$this->create_deploy_script();
 		// $old_path = getcwd();
 		// chdir( __DIR__ );
 		// $output = shell_exec( './deploy.sh' );
@@ -84,6 +85,8 @@ class Webhook {
 
 	/** Create deploy.sh bash file */
 	public function create_deploy_script() {
-
+		if ( file_exists( 'deploy.sh' ) ) {
+			echo 'deploy script exists';
+		}
 	}
 }
