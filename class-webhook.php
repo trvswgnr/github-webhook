@@ -5,13 +5,32 @@
  * @package ghwh
  */
 
+// get config with variables.
 require_once 'config.php';
 
 /** Webhook */
 class Webhook {
+	/**
+	 * Payload
+	 *
+	 * @var Object Payload.
+	 */
 	public $payload;
+
+	/**
+	 * Event
+	 *
+	 * @var string GitHub event.
+	 */
 	public $event;
+
+	/**
+	 * Merged
+	 *
+	 * @var boolean If the branch has been merged.
+	 */
 	public $merged = false;
+
 	/**
 	 * Construct
 	 *
@@ -86,6 +105,7 @@ class Webhook {
 
 	/** Create deploy.sh bash file */
 	public function create_deploy_script() {
+		// TODO: can probably remove this function.
 		if ( file_exists( 'scripts/deploy.sh' ) ) {
 			echo 'Deploy script exists. Skipping create deploy script...';
 			return;
