@@ -5,6 +5,8 @@
  * @package ghwh
  */
 
+require_once 'config.php';
+
 /** Webhook */
 class Webhook {
 	public $payload;
@@ -32,7 +34,6 @@ class Webhook {
 				$this->branch = substr( strrchr( $this->payload->ref, 'heads/' ), 6 );
 				break;
 		}
-		$this->deploy( 'test' );
 	}
 
 	/** Get GitHub event */
@@ -60,33 +61,37 @@ class Webhook {
 	/**
 	 * Deploy from GitHub event
 	 *
-	 * @param string $trigger (optional) Event to trigger action.
-	 * @param string $branch (optional) Branch that action occurs on.
-	 * @param string $deploy_path Path on server to deploy to. Should be a Git repository with GitHub remote.
+	 * @param string  $deploy_path Path on server to deploy to. Should be a Git repository with GitHub remote.
+	 * @param string  $trigger (optional) Event to trigger action.
+	 * @param string  $branch (optional) Branch that action occurs on.
+	 * @param boolean $merged (optional) Whether or not the branch needs to be merged.
+	 * @param string  $remote (optional) The Git remote.
+	 * @param string  $script (optional) Bash script for deploying.
 	 */
-	public function deploy( $deploy_path, $trigger = 'pull_request', $branch = 'master', $merged = true ) {
-		if (
-			$trigger !== $this->event ||
-			$branch !== $this->branch ||
-			$merged !== $this->merged ||
-			! $deploy_path
-		) {
-			echo "Wrong action, not on correct branch '$branch', and/or not merged. Skipping...";
-			return false;
+	public function deploy( $deploy_path, $trigger = 'pull_request', $branch = 'master', $merged = true, $remote = 'origin', $script = './scripts/deploy.sh' ) {
+		if ( $trigger !== $this->event ) {
+			echo "Trigger event '$trigger' not detected. Exiting...\n";
 		}
-		echo "Trigger event '$trigger' detected. On correct branch '$branch' & is merged = $merged. Deploying...";
+		if ( $branch !== $this->branch ) {
+			echo "Not on branch '$branch'. Exiting...\n";
+		}
+		if ( $merged !== $this->merged ) {
+			echo "Merged does not equal $merged. Exiting...\n";
+		}
+		echo "Trigger event '$trigger' detected. On correct branch '$branch' & merged = $merged. Deploying...\n";
 		$this->create_deploy_script();
-		// $old_path = getcwd();
-		// chdir( __DIR__ );
-		// $output = shell_exec( './deploy.sh' );
-		// chdir( $old_path );
+		$output = shell_exec( "$script $deploy_path $remote $branch" );
 		return true;
 	}
 
 	/** Create deploy.sh bash file */
 	public function create_deploy_script() {
-		if ( file_exists( 'deploy.sh' ) ) {
-			echo 'deploy script exists';
+		if ( file_exists( 'scripts/deploy.sh' ) ) {
+			echo 'Deploy script exists. Skipping create deploy script...';
+			return;
 		}
+		$script = "#!/bin/bash\ncd \$1\ngit checkout \$3\ngit clean -f -d\ngit fetch --all\ngit reset --hard \$2/\$3\n";
+		file_put_contents( 'scripts/deploy.sh', $script );
+		shell_exec( 'chmod u+x scripts/deploy.sh' );
 	}
 }

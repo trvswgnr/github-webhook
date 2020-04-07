@@ -5,7 +5,10 @@
  * @package ghwh
  */
 
-require_once 'config.php';
+// get the class.
 require_once 'class-webhook.php';
 
 $webhook = new Webhook( SHARED_SECRET );
+
+// deploy if pull request is merged into master branch.
+$webhook->deploy( '/path/to/directory' );
