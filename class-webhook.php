@@ -90,7 +90,7 @@ class Webhook {
 			echo 'Deploy script exists. Skipping create deploy script...';
 			return;
 		}
-		$script = "#!/bin/bash\ncd \$1\ngit checkout \$3\ngit clean -f -d\ngit fetch --all\ngit reset --hard \$2/\$3\n";
+		$script = "#!/bin/bash\ncd \$1\ngit checkout \$3\ngit clean -fdx\ngit fetch --all\ngit reset --hard \$2/\$3\n";
 		file_put_contents( 'scripts/deploy.sh', $script );
 		shell_exec( 'chmod u+x scripts/deploy.sh' );
 	}
