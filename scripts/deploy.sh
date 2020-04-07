@@ -9,7 +9,7 @@ REMOTE=$2
 BRANCH=$3
 cd $DEPLOY_PATH
 git checkout $BRANCH
-git clean -f -d
+git clean -fdx
 git fetch --all
 git reset --hard $REMOTE/$BRANCH
 echo ""
